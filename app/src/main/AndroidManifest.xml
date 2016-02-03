@@ -18,6 +18,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AddressbookActivity"
+            android:label="@string/title_activity_addressbook"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".SendActivity"
+
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.ideale.sunneschii.SendActivity" />
+        </activity>
     </application>
 
 </manifest>

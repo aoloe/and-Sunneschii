@@ -1,15 +1,20 @@
 package ch.ideale.sunneschii;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 public class SendActivity extends AppCompatActivity {
+
+    private static final int PICK_CONTACT_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,19 @@ public class SendActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
     }
 
     @Override
@@ -48,5 +66,38 @@ public class SendActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onOpenAddressbook(View view) {
+        // EditText messageView = (EditText) findViewById(R.id.message);
+        // String messageText = messageView.getText().toString();
+
+        Intent intent = new Intent(this, AddressbookActivity.class);
+        // intent.putExtra(SendActivity.ADDRESS_MESSAGE, addressText)
+
+        // startActivity(intent);
+        startActivityForResult(intent, PICK_CONTACT_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == PICK_CONTACT_REQUEST) {
+            switch(requestCode) {
+                case PICK_CONTACT_REQUEST:
+                    if (resultCode == RESULT_OK) {
+                        Bundle res = data.getExtras();
+                        String result = res.getString("results");
+                        Log.d("FIRST", "result:" + result);
+                    }
+                    break;
+            }
+
+        }
+    }
+
+    private void pickContact() {
+        Intent intent = new Intent(this, AddressbookActivity.class);
+        startActivityForResult(intent, PICK_CONTACT_REQUEST);
     }
 }
