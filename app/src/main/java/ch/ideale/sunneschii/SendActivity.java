@@ -6,11 +6,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class SendActivity extends AppCompatActivity {
 
@@ -23,7 +26,7 @@ public class SendActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -32,8 +35,20 @@ public class SendActivity extends AppCompatActivity {
             }
         });
 
-
-
+        // http://stackoverflow.com/questions/3013791/live-character-count-for-edittext
+        final TextView mTextView = (TextView) findViewById(R.id.textViewCounter);
+        EditText mEditText= (EditText) findViewById(R.id.editTextMessage);
+        final TextWatcher mTextEditorWatcher = new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                mTextView.setText(String.format("(%d)",  160 - s.length()));
+            }
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        mEditText.addTextChangedListener(mTextEditorWatcher);
     }
 
     @Override
@@ -89,6 +104,8 @@ public class SendActivity extends AppCompatActivity {
                         Bundle res = data.getExtras();
                         String result = res.getString("results");
                         Log.d("FIRST", "result:" + result);
+                        EditText editText = (EditText) findViewById(R.id.editTextNumber);
+                        editText.setText(result, TextView.BufferType.EDITABLE);
                     }
                     break;
             }
