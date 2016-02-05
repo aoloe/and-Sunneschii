@@ -63,10 +63,6 @@ public class AddressbookActivity extends AppCompatActivity {
                 setResult(RESULT_OK, intent);
                 finish();
             }
-
         });
-
-
-
     }
 }

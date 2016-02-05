@@ -35,9 +35,19 @@ public class SendActivity extends AppCompatActivity {
             }
         });
 
+        EditText mEditTextMessage= (EditText) findViewById(R.id.editTextMessage);
+
+        if (savedInstanceState != null) {
+            String number = savedInstanceState.getString("number");
+            EditText mEditTextNumber= (EditText) findViewById(R.id.editTextNumber);
+            mEditTextNumber.setText(number);
+
+            String message = savedInstanceState.getString("message");
+            mEditTextMessage.setText(message);
+        }
+
         // http://stackoverflow.com/questions/3013791/live-character-count-for-edittext
         final TextView mTextView = (TextView) findViewById(R.id.textViewCounter);
-        EditText mEditText= (EditText) findViewById(R.id.editTextMessage);
         final TextWatcher mTextEditorWatcher = new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -48,17 +58,18 @@ public class SendActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         };
-        mEditText.addTextChangedListener(mTextEditorWatcher);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        mEditTextMessage.addTextChangedListener(mTextEditorWatcher);
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        EditText mEditTextNumber= (EditText) findViewById(R.id.editTextNumber);
+        String number = mEditTextNumber.getText().toString();
+        savedInstanceState.putString("number", number);
 
+        EditText mEditTextMessage= (EditText) findViewById(R.id.editTextMessage);
+        String message = mEditTextMessage.getText().toString();
+        savedInstanceState.putString("message", message);
     }
 
     @Override
@@ -84,13 +95,7 @@ public class SendActivity extends AppCompatActivity {
     }
 
     public void onOpenAddressbook(View view) {
-        // EditText messageView = (EditText) findViewById(R.id.message);
-        // String messageText = messageView.getText().toString();
-
         Intent intent = new Intent(this, AddressbookActivity.class);
-        // intent.putExtra(SendActivity.ADDRESS_MESSAGE, addressText)
-
-        // startActivity(intent);
         startActivityForResult(intent, PICK_CONTACT_REQUEST);
     }
 
@@ -103,18 +108,13 @@ public class SendActivity extends AppCompatActivity {
                     if (resultCode == RESULT_OK) {
                         Bundle res = data.getExtras();
                         String result = res.getString("results");
-                        Log.d("FIRST", "result:" + result);
+                        Log.d("onActivityResult", "result:" + result);
                         EditText editText = (EditText) findViewById(R.id.editTextNumber);
                         editText.setText(result, TextView.BufferType.EDITABLE);
                     }
                     break;
             }
-
         }
-    }
-
-    private void pickContact() {
-        Intent intent = new Intent(this, AddressbookActivity.class);
-        startActivityForResult(intent, PICK_CONTACT_REQUEST);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
